@@ -1,7 +1,6 @@
 #include "lossfunction.h"
 
-namespace loss
-{
+namespace loss{
     double MeanAbsoluteError::GetLoss(const Matrix& prediction, const Matrix& target) //const
     {
         return Matrix::Map(prediction - target, [](double x) { return abs(x); }).Sum();

@@ -11,6 +11,9 @@ add_library(
     layer
     layer/layer.h
     layer/layer.cpp
+    model
+    model/model.h
+    model/model.cpp
 )
 
 target_include_directories(matrix PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/matrix")

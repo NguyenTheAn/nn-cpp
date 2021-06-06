@@ -5,34 +5,28 @@
 #endif // _DEBUG
 
 
-Matrix::Matrix() : m_Rows(0), m_Columns(0), m_Matrix()
-{
+Matrix::Matrix() : m_Rows(0), m_Columns(0), m_Matrix() {
 }
 
-Matrix::Matrix(unsigned int rows, unsigned int columns, double initValue) : m_Rows(rows), m_Columns(columns), m_Matrix(rows*columns)
-{
+Matrix::Matrix(unsigned int rows, unsigned int columns, double initValue) : m_Rows(rows), m_Columns(columns), m_Matrix(rows*columns) {
 	if (initValue == -1)
 		Randomize();
 	else
 		std::fill(m_Matrix.begin(), m_Matrix.end(), initValue);
 }
 
-Matrix::Matrix(const Matrix & matrix) : m_Rows(matrix.m_Rows), m_Columns(matrix.m_Columns), m_Matrix(matrix.m_Matrix)
-{
+Matrix::Matrix(const Matrix & matrix) : m_Rows(matrix.m_Rows), m_Columns(matrix.m_Columns), m_Matrix(matrix.m_Matrix) {
 }
 
-Matrix::Matrix(Matrix && matrix) : m_Rows(matrix.m_Rows), m_Columns(matrix.m_Columns), m_Matrix(std::move(matrix.m_Matrix))
-{
+Matrix::Matrix(Matrix && matrix) : m_Rows(matrix.m_Rows), m_Columns(matrix.m_Columns), m_Matrix(std::move(matrix.m_Matrix)) {
 
 }
 
-Matrix::Matrix(const std::vector<double>& data) : m_Rows(data.size()), m_Columns(1), m_Matrix(data)
-{
+Matrix::Matrix(const std::vector<double>& data) : m_Rows(data.size()), m_Columns(1), m_Matrix(data) {
 }
 
 #ifdef _DEBUG
-Matrix::Matrix(const std::vector<std::vector<double>>& matrix) : m_Rows(matrix.size()), m_Columns(matrix[0].size()), m_Matrix(matrix.size()*matrix[0].size())
-{
+Matrix::Matrix(const std::vector<std::vector<double>>& matrix) : m_Rows(matrix.size()), m_Columns(matrix[0].size()), m_Matrix(matrix.size()*matrix[0].size()) {
 	for (unsigned int i = 0; i < m_Rows; ++i)
 	{
 		for (unsigned int j = 0; j < m_Columns; ++j)
@@ -44,31 +38,26 @@ Matrix::Matrix(const std::vector<std::vector<double>>& matrix) : m_Rows(matrix.s
 #endif // _DEBUG
 
 
-Matrix & Matrix::operator=(const Matrix & matrix)
-{
+Matrix & Matrix::operator=(const Matrix & matrix) {
 	m_Rows = matrix.m_Rows; m_Columns = matrix.m_Columns;
 	m_Matrix = matrix.m_Matrix;
 	return *this;
 }
 
-Matrix & Matrix::operator=(Matrix && matrix)
-{
+Matrix & Matrix::operator=(Matrix && matrix) {
 	m_Rows = matrix.m_Rows; m_Columns = matrix.m_Columns; m_Matrix = std::move(matrix.m_Matrix);
 	return *this;
 }
 
-Matrix::~Matrix()
-{
+Matrix::~Matrix() {
 }
 
-double Matrix::Sum() const
-{
+double Matrix::Sum() const {
 	double sum = 0.0;
 	return std::accumulate(m_Matrix.begin(), m_Matrix.end(), sum);
 }
 
-void Matrix::Randomize(double min, double max)
-{
+void Matrix::Randomize(double min, double max) {
 
 	std::random_device randomDevice;
 	std::mt19937 engine(randomDevice());
@@ -79,13 +68,11 @@ void Matrix::Randomize(double min, double max)
 	}
 }
 
-void Matrix::ZeroOut()
-{
+void Matrix::ZeroOut() {
 	std::fill(m_Matrix.begin(), m_Matrix.end(), 0);
 }
 
-std::vector<double> Matrix::GetColumnVector() const
-{
+std::vector<double> Matrix::GetColumnVector() const {
 #ifdef _DEBUG
 	if (m_Columns != 1)
 		throw MatrixError("Number of columns has to be 1 in order to make column vector!");
@@ -93,15 +80,13 @@ std::vector<double> Matrix::GetColumnVector() const
 	return m_Matrix;
 }
 
-void Matrix::SaveMatrix(std::ofstream & outfile) const
-{
+void Matrix::SaveMatrix(std::ofstream & outfile) const {
 	outfile.write((char*)(&m_Rows), sizeof(m_Rows));
 	outfile.write((char*)(&m_Columns), sizeof(m_Columns));
 	outfile.write((char*)&m_Matrix[0], sizeof(double)*m_Rows*m_Columns);
 }
 
-double & Matrix::operator()(unsigned int row, unsigned int column)
-{
+double & Matrix::operator()(unsigned int row, unsigned int column) {
 #ifdef _DEBUG
 	if ((column + row*m_Columns) >= m_Rows*m_Columns)
 		throw MatrixError("Index out of range!");
@@ -109,8 +94,7 @@ double & Matrix::operator()(unsigned int row, unsigned int column)
 	return m_Matrix[column + row*m_Columns];
 }
 
-const double & Matrix::operator()(unsigned int row, unsigned int column) const
-{
+const double & Matrix::operator()(unsigned int row, unsigned int column) const {
 #ifdef _DEBUG
 	if ((column + row*m_Columns) >= m_Rows*m_Columns)
 		throw MatrixError("Index out of range!");
@@ -118,8 +102,7 @@ const double & Matrix::operator()(unsigned int row, unsigned int column) const
 	return m_Matrix[column + row*m_Columns];
 }
 
-double & Matrix::operator[](const std::pair<unsigned int, unsigned int>& index)
-{
+double & Matrix::operator[](const std::pair<unsigned int, unsigned int>& index) {
 #ifdef _DEBUG
 	if ((index.second + index.first*m_Columns) >= m_Rows*m_Columns)
 		throw MatrixError("Index out of range!");
@@ -127,8 +110,7 @@ double & Matrix::operator[](const std::pair<unsigned int, unsigned int>& index)
 	return m_Matrix[index.second + index.first*m_Columns];
 }
 
-const double & Matrix::operator[](const std::pair<unsigned int, unsigned int>& index) const
-{
+const double & Matrix::operator[](const std::pair<unsigned int, unsigned int>& index) const {
 #ifdef _DEBUG
 	if ((index.second + index.first*m_Columns) >= m_Rows*m_Columns)
 		throw MatrixError("Index out of range!");
@@ -136,8 +118,7 @@ const double & Matrix::operator[](const std::pair<unsigned int, unsigned int>& i
 	return m_Matrix[index.second + index.first*m_Columns];
 }
 
-Matrix & Matrix::operator+=(const Matrix & other)
-{
+Matrix & Matrix::operator+=(const Matrix & other) {
 #ifdef _DEBUG
 	if (!HasSameDimension(other))
 		throw MatrixError("Matrices do not have the same dimension!");
@@ -146,14 +127,12 @@ Matrix & Matrix::operator+=(const Matrix & other)
 	return *this;
 }
 
-Matrix & Matrix::operator+=(double scalar)
-{
+Matrix & Matrix::operator+=(double scalar) {
 	std::for_each(m_Matrix.begin(), m_Matrix.end(), [scalar](double& x) { x += scalar; });
 	return *this;
 }
 
-Matrix & Matrix::operator-=(const Matrix & other)
-{
+Matrix & Matrix::operator-=(const Matrix & other) {
 #ifdef _DEBUG
 	if (!HasSameDimension(other))
 		throw MatrixError("Matrices do not have the same dimension!");
@@ -162,20 +141,17 @@ Matrix & Matrix::operator-=(const Matrix & other)
 	return *this;
 }
 
-Matrix & Matrix::operator-=(double scalar)
-{
+Matrix & Matrix::operator-=(double scalar) {
 	std::for_each(m_Matrix.begin(), m_Matrix.end(), [scalar](double& x) { x -= scalar; });
 	return *this;
 }
 
-Matrix & Matrix::operator*=(double scalar)
-{
+Matrix & Matrix::operator*=(double scalar) {
 	std::for_each(m_Matrix.begin(), m_Matrix.end(), [scalar](double& x) { x *= scalar; });
 	return *this;
 }
 
-Matrix & Matrix::operator*=(const Matrix & other)
-{
+Matrix & Matrix::operator*=(const Matrix & other) {
 #ifdef _DEBUG
 	if (m_Columns != other.m_Rows)
 		throw MatrixError("Number of columns of the left matrix has to match number of rows of the right matrix!");
@@ -184,8 +160,7 @@ Matrix & Matrix::operator*=(const Matrix & other)
 	return *this;
 }
 
-Matrix & Matrix::operator/=(double scalar)
-{
+Matrix & Matrix::operator/=(double scalar) {
 #ifdef _DEBUG
 	if (scalar == 0)
 		throw MatrixError("Cannot divide by zero!");
@@ -194,8 +169,7 @@ Matrix & Matrix::operator/=(double scalar)
 	return *this;
 }
 
-Matrix & Matrix::DotProduct(const Matrix & other)
-{
+Matrix & Matrix::DotProduct(const Matrix & other) {
 #ifdef _DEBUG
 	if (!HasSameDimension(other))
 		throw MatrixError("Matrices do not have the same dimension!");
@@ -204,8 +178,7 @@ Matrix & Matrix::DotProduct(const Matrix & other)
 	return *this;
 }
 
-Matrix & Matrix::Transpose()
-{
+Matrix & Matrix::Transpose() {
 	if (m_Rows != 1 && m_Columns != 1)
 	{
 		std::vector<double> transposedMatrix(m_Rows*m_Columns);
@@ -222,8 +195,7 @@ Matrix & Matrix::Transpose()
 	return *this;
 }
 
-Matrix Matrix::LoadMatrix(std::ifstream & infile)
-{
+Matrix Matrix::LoadMatrix(std::ifstream & infile) {
 	unsigned int rows, columns;
 	infile.read((char*)&rows, sizeof(rows));
 	infile.read((char*)&columns, sizeof(columns));
@@ -236,15 +208,13 @@ Matrix Matrix::LoadMatrix(std::ifstream & infile)
 	return matrix;
 }
 
-Matrix Matrix::OneHot(unsigned int one, unsigned int size)
-{
+Matrix Matrix::OneHot(unsigned int one, unsigned int size) {
 	Matrix matrix(1, size, 0);
 	matrix(0, one) = 1;
 	return matrix;
 }
 
-Matrix Matrix::DotProduct(const Matrix & left, const Matrix & right)
-{
+Matrix Matrix::DotProduct(const Matrix & left, const Matrix & right) {
 #ifdef _DEBUG
 	if (!left.HasSameDimension(right))
 		throw MatrixError("Matrices do not have the same dimension!");
@@ -254,8 +224,7 @@ Matrix Matrix::DotProduct(const Matrix & left, const Matrix & right)
 	return result;
 }
 
-Matrix Matrix::Transpose(const Matrix & matrix)
-{
+Matrix Matrix::Transpose(const Matrix & matrix) {
 	Matrix result(matrix);
 	if (matrix.m_Rows != 1 && matrix.m_Columns != 1)
 	{
@@ -271,15 +240,13 @@ Matrix Matrix::Transpose(const Matrix & matrix)
 	return result;
 }
 
-Matrix Matrix::BuildColumnMatrix(unsigned int rows, double value)
-{
+Matrix Matrix::BuildColumnMatrix(unsigned int rows, double value) {
 	Matrix matrix(rows, 1);
 	std::fill(matrix.m_Matrix.begin(), matrix.m_Matrix.end(), value);
 	return matrix;
 }
 
-Matrix Matrix::Max(const Matrix & first, const Matrix & second)
-{
+Matrix Matrix::Max(const Matrix & first, const Matrix & second) {
 #ifdef _DEBUG
 	if (!first.HasSameDimension(second))
 		throw MatrixError("Matrices do not have the same dimension!");
@@ -289,13 +256,11 @@ Matrix Matrix::Max(const Matrix & first, const Matrix & second)
 	return result;
 }
 
-bool Matrix::HasSameDimension(const Matrix & other) const
-{
+bool Matrix::HasSameDimension(const Matrix & other) const {
 	return m_Rows == other.m_Rows && m_Columns == other.m_Columns;
 }
 
-std::ostream & operator<<(std::ostream & out, const Matrix & m)
-{
+std::ostream & operator<<(std::ostream & out, const Matrix & m) {
 	for (unsigned int i = 0; i < m.m_Rows; ++i)
 	{
 		for (unsigned int j = 0; j < m.m_Columns; ++j)
@@ -307,8 +272,7 @@ std::ostream & operator<<(std::ostream & out, const Matrix & m)
 	return out;
 }
 
-Matrix operator+(const Matrix & left, const Matrix & right)
-{
+Matrix operator+(const Matrix & left, const Matrix & right) {
 #ifdef _DEBUG
 	if (!left.HasSameDimension(right))
 		throw MatrixError("Matrices do not have the same dimension!");
@@ -318,22 +282,19 @@ Matrix operator+(const Matrix & left, const Matrix & right)
 	return result;
 }
 
-Matrix operator*(const Matrix & matrix, double scalar)
-{
+Matrix operator*(const Matrix & matrix, double scalar) {
 	Matrix result(matrix);
 	std::for_each(result.m_Matrix.begin(), result.m_Matrix.end(), [scalar](double& x) { x *= scalar; });
 	return result;
 }
 
-Matrix operator*(double scalar, const Matrix & matrix)
-{
+Matrix operator*(double scalar, const Matrix & matrix) {
 	Matrix result(matrix);
 	std::for_each(result.m_Matrix.begin(), result.m_Matrix.end(), [scalar](double& x) { x *= scalar; });
 	return result;
 }
 
-Matrix operator-(const Matrix & left, const Matrix & right)
-{
+Matrix operator-(const Matrix & left, const Matrix & right) {
 #ifdef _DEBUG
 	if (!left.HasSameDimension(right))
 		throw MatrixError("Matrices do not have the same dimension!");
@@ -344,15 +305,13 @@ Matrix operator-(const Matrix & left, const Matrix & right)
 	return result;
 }
 
-Matrix operator-(double scalar, const Matrix & matrix)
-{
+Matrix operator-(double scalar, const Matrix & matrix) {
 	Matrix result(matrix.m_Rows, matrix.m_Columns);
 	result.Map([scalar](double x) { return scalar - x; });
 	return result;
 }
 
-Matrix operator*(const Matrix & left, const Matrix & right)
-{
+Matrix operator*(const Matrix & left, const Matrix & right) {
 #ifdef _DEBUG
 	if (left.m_Columns != right.m_Rows)
 		throw MatrixError("Number of columns of the left matrix has to match number of rows of the right matrix!");
@@ -366,8 +325,7 @@ Matrix operator*(const Matrix & left, const Matrix & right)
 	return result;
 }
 
-Matrix operator/(const Matrix & matrix, double scalar)
-{
+Matrix operator/(const Matrix & matrix, double scalar) {
 #ifdef _DEBUG
 	if (scalar == 0)
 		throw MatrixError("Cannot divide by zero!");
@@ -378,8 +336,7 @@ Matrix operator/(const Matrix & matrix, double scalar)
 	return result;
 }
 
-Matrix operator/(const Matrix & left, const Matrix & right)
-{
+Matrix operator/(const Matrix & left, const Matrix & right) {
 #ifdef _DEBUG
 	if (!left.HasSameDimension(right))
 		throw MatrixError("Matrices do not have the same dimension!");

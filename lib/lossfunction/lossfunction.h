@@ -1,8 +1,7 @@
 #pragma once
 #include "../matrix/matrix.h"
 
-namespace loss
-{
+namespace loss {
     // class LossFunction
     // {
     // public:
