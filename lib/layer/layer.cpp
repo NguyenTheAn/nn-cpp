@@ -2,12 +2,6 @@
 #define pii std::pair<unsigned int, unsigned int>
 
 namespace Layer{
-    // Matrix HiddenLayer::UpdateActivation(const Matrix & input) {
-    //     WeightedSum = WeightMatrix*input + BiasMatrix;
-    //     Activation = WeightedSum;
-    //     Activation = ActivationFunction->Function(Activation);
-    //     return Activation;
-    // }
 
     Matrix& HiddenLayer::operator()(Matrix & input){
         WeightedSum = WeightMatrix*input + BiasMatrix;
@@ -16,6 +10,7 @@ namespace Layer{
         return Activation;
     }
 
+    HiddenLayer::HiddenLayer(){}
     HiddenLayer::HiddenLayer(unsigned int inputNeurons, unsigned int outputNeurons, activation::Type activationFunction)
         : WeightMatrix(outputNeurons, inputNeurons),
         BiasMatrix(outputNeurons, 1),
@@ -70,6 +65,16 @@ namespace Layer{
 		return *this;
 	}
 
+    HiddenLayer & HiddenLayer::operator=(const HiddenLayer & layer) {
+        WeightMatrix = std::move(layer.WeightMatrix);
+		BiasMatrix = std::move(layer.BiasMatrix);
+		Activation = std::move(layer.Activation);
+		ActivationFunction = std::move(layer.ActivationFunction);
+		WeightedSum = std::move(layer.WeightedSum);
+        return *this;
+    }
+
+    InputLayer::InputLayer(){}
     InputLayer::InputLayer(const unsigned int input_dims):input_dims(input_dims){
         m_Input = Matrix(input_dims, 1);
     }
@@ -84,6 +89,8 @@ namespace Layer{
         Activation = ActivationFunction->Function(Activation);
         return Activation;
     }
+
+    OutputLayer::OutputLayer(){}
 
     OutputLayer::OutputLayer(unsigned int inputNeurons, unsigned int outputNeurons, activation::Type activationFunction)
         : WeightMatrix(outputNeurons, inputNeurons),
@@ -129,7 +136,8 @@ namespace Layer{
         return layer;
     }
 
-    OutputLayer & OutputLayer::operator=(OutputLayer && layer) {
+    OutputLayer & OutputLayer::operator=(OutputLayer && layer)
+	{
 		WeightMatrix = std::move(layer.WeightMatrix);
 		BiasMatrix = std::move(layer.BiasMatrix);
 		Activation = std::move(layer.Activation);
@@ -137,5 +145,14 @@ namespace Layer{
 		WeightedSum = std::move(layer.WeightedSum);
 		return *this;
 	}
+
+    OutputLayer & OutputLayer::operator=(const OutputLayer & layer) {
+        WeightMatrix = std::move(layer.WeightMatrix);
+		BiasMatrix = std::move(layer.BiasMatrix);
+		Activation = std::move(layer.Activation);
+		ActivationFunction = std::move(layer.ActivationFunction);
+		WeightedSum = std::move(layer.WeightedSum);
+        return *this;
+    }
 
 }

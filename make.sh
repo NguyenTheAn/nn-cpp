@@ -1,5 +1,8 @@
 # rm -rf build
-mkdir build
+if [ ! -d "/path/to/dir" ] 
+then
+    mkdir build
+fi
 cd build
 cmake ..
 make -j4

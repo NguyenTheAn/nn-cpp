@@ -2,6 +2,7 @@
 #include "../activationfunction/activation.h"
 #include <memory>
 
+
 namespace Layer{
     class HiddenLayer{
         public:
@@ -11,14 +12,15 @@ namespace Layer{
             Matrix Activation;
             Matrix WeightedSum;
 
+            HiddenLayer();
             HiddenLayer(unsigned int inputNeurons, unsigned int outputNeurons, activation::Type activationFunction);
-            // Matrix UpdateActivation(const Matrix& input);
             void Initialize();
             void SaveHiddenLayer(std::ofstream& outfile) const;
             static HiddenLayer LoadHiddenLayer(std::ifstream& infile);
             HiddenLayer(HiddenLayer&& layer) noexcept;
             HiddenLayer(const HiddenLayer& layer);
             HiddenLayer& operator=(HiddenLayer&& layer);
+            HiddenLayer& operator=(const HiddenLayer& matrix);
             Matrix& operator()(Matrix & input);
     };
 
@@ -27,6 +29,7 @@ namespace Layer{
             unsigned int input_dims;
             Matrix m_Input;
             
+            InputLayer();
             InputLayer(const unsigned int input_dims);
             Matrix& operator()(Matrix & input);
 
@@ -40,6 +43,7 @@ namespace Layer{
             Matrix Activation;
             Matrix WeightedSum;
 
+            OutputLayer();
             OutputLayer(unsigned int inputNeurons, unsigned int outputNeurons, activation::Type activationFunction);
             void Initialize();
             void SaveOutputLayer(std::ofstream& outfile) const;
@@ -47,6 +51,7 @@ namespace Layer{
             OutputLayer(OutputLayer&& layer) noexcept;
             OutputLayer(const OutputLayer& layer);
             OutputLayer& operator=(OutputLayer&& layer);
+            OutputLayer& operator=(const OutputLayer& matrix);
             Matrix& operator()(Matrix & input);
     };
 

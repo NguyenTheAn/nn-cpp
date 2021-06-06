@@ -45,6 +45,7 @@
 			{
 				sum += exp(a); return a;
 			});
+			std::cout<<x<<std::endl;
 			m_Activation = x.Map([sum](double a) { return exp(a) / sum; });
 			return m_Activation;
 		}

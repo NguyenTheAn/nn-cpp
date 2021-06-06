@@ -11,4 +11,8 @@ class Model{
         void Add(Layer::InputLayer inputLayer);
         void Add(Layer::HiddenLayer hidden);
         void Add(Layer::OutputLayer outputLayer);
+        void Initialize();
+        Matrix Feedforward(Matrix input);
+        void SaveMode(std::ofstream& outfile);
+        void LoadModel(std::ifstream& infile);
 };
