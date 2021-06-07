@@ -10,6 +10,9 @@
 #define pii std::pair<unsigned int, unsigned int>
 #define vb std::vector<double>
 
+int EPOCHS = 10;
+float LR = 0.001;
+
 Model createModel(unsigned int input_dims, unsigned int num_classes){
     Model model;
     model.Add(Layer::InputLayer(input_dims));
@@ -23,10 +26,8 @@ Model createModel(unsigned int input_dims, unsigned int num_classes){
 
 int main(){
     Model model = createModel(1024, 10);
-    std::ifstream infile;
-    infile.open("model.bin", std::ios::in | std::ios::binary);
-    model.LoadModel(infile);
-    infile.close();
+    loss::CrossEntropy criterion;
+    // model.LoadModel("model.bin");
 
     vb data;
     for (int i = 0; i<1024; i++){
@@ -34,8 +35,10 @@ int main(){
     }
     Matrix input(1, 1024);
     input.m_Matrix = data;
-    Matrix output = model.Feedforward(input);
-    print(output);
+    // Matrix output = model.Feedforward(input);
+    Matrix target(10, 1, 1);
+    float loss = model.Backpropagation(input, target, criterion, LR);
+    print(loss);
 
     // std::ofstream outfile;
     // outfile.open("model.bin", std::ios::binary | std::ios::out);

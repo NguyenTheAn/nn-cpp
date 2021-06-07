@@ -1,5 +1,6 @@
 #pragma one
 #include "../layer/layer.h"
+#include "../lossfunction/lossfunction.h"
 
 class Model{
     public:
@@ -12,7 +13,8 @@ class Model{
         void Add(Layer::HiddenLayer hidden);
         void Add(Layer::OutputLayer outputLayer);
         void Initialize();
+        void SaveMode(std::string fileName);
+        void LoadModel(std::string fileName);
         Matrix Feedforward(Matrix input);
-        void SaveMode(std::ofstream& outfile);
-        void LoadModel(std::ifstream& infile);
+        float Backpropagation(Matrix input, Matrix target, loss::CrossEntropy criterion, float LR);
 };
