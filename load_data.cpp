@@ -24,9 +24,11 @@ Matrix load_data(std::string data_path, int rows, int cols){
             int pixel;
             inFile >> pixel;
             data.push_back(pixel);
+            // print(pixel);
         }
     }
     Matrix mat = Matrix(data);
+    // print(mat);
     mat.m_Rows = rows;
     mat.m_Columns = cols;
     inFile.close();
