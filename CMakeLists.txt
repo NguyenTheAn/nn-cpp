@@ -5,4 +5,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_subdirectory(lib)
 
-add_executable(NeuralNet main.cpp)
+add_executable(NeuralNet load_data.cpp)

@@ -29,33 +29,10 @@ int main(){
     loss::CrossEntropy criterion;
     // model.LoadModel("model.bin");
 
-    vb data;
-    for (int i = 0; i<1024; i++){
-        data.push_back(i);
-    }
-    Matrix input(1, 1024);
-    input.m_Matrix = data;
     // Matrix output = model.Feedforward(input);
-    Matrix target(10, 1, 1);
-    float loss = model.Backpropagation(input, target, criterion, LR);
-    print(loss);
-
-    // std::ofstream outfile;
-    // outfile.open("model.bin", std::ios::binary | std::ios::out);
-    // model.SaveMode(outfile);
-    // outfile.close();
-
-    // std::ofstream outfile;
-    // outfile.open("model.bin", std::ios::binary | std::ios::out);
-    // Layer::HiddenLayer layer(1, 2, activation::Type::RELU);
-    // layer.SaveHiddenLayer(outfile);
-    // outfile.close();
-
-    // std::ifstream infile;
-    // infile.open("model.bin", std::ios::in | std::ios::binary);
-    // Layer::HiddenLayer layer = Layer::HiddenLayer::LoadHiddenLayer(infile);
-    // print(layer.WeightMatrix);
-    // infile.close();
+    // Matrix target(10, 1, 1);
+    // float loss = model.Backpropagation(input, target, criterion, LR);
+    // print(loss);
 
     return 0;
 }
