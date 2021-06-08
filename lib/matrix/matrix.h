@@ -25,6 +25,7 @@ public:
 	Matrix(const Matrix& matrix);
 	Matrix(Matrix&& matrix);
 	Matrix(const std::vector<double>& data);
+	Matrix(const std::vector<double>& data, unsigned int rows, unsigned int columns);
 #ifdef _DEBUG
 	Matrix(const std::vector<std::vector<double>>& matrix);
 #endif // _DEBUG
@@ -39,6 +40,9 @@ public:
 	void Randomize(double min = -1, double max = 1);
 	void ZeroOut();
 	std::vector<double> GetColumnVector() const;
+	std::vector<double> GetColumn(unsigned int col);
+	std::vector<double> GetRow(unsigned int row);
+	void AddRow(std::vector<double> in);
 	void SaveMatrix(std::ofstream& outfile) const;
 
 	inline double& operator()(unsigned int row, unsigned int column);

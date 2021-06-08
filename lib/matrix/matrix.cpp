@@ -25,6 +25,10 @@ Matrix::Matrix(Matrix && matrix) : m_Rows(matrix.m_Rows), m_Columns(matrix.m_Col
 Matrix::Matrix(const std::vector<double>& data) : m_Rows(data.size()), m_Columns(1), m_Matrix(data) {
 }
 
+Matrix::Matrix(const std::vector<double>& data, unsigned int rows, unsigned int columns) 
+	: m_Rows(rows), m_Columns(columns), m_Matrix(data) {
+}
+
 #ifdef _DEBUG
 Matrix::Matrix(const std::vector<std::vector<double>>& matrix) : m_Rows(matrix.size()), m_Columns(matrix[0].size()), m_Matrix(matrix.size()*matrix[0].size()) {
 	for (unsigned int i = 0; i < m_Rows; ++i)
@@ -78,6 +82,27 @@ std::vector<double> Matrix::GetColumnVector() const {
 		throw MatrixError("Number of columns has to be 1 in order to make column vector!");
 #endif // _DEBUG
 	return m_Matrix;
+}
+
+std::vector<double> Matrix::GetColumn(unsigned int col) {
+	std::vector<double> data;
+	for (int i=0; i< m_Rows; i++){
+		data.push_back(m_Matrix[col + i*m_Rows]);
+	}
+	return data;
+}
+
+std::vector<double> Matrix::GetRow(unsigned int row) {
+	std::vector<double> data;
+	for (int i=0; i< m_Columns; i++){
+		data.push_back(m_Matrix[row*m_Columns + i]);
+	}
+	return data;
+}
+
+void Matrix::AddRow(std::vector<double> in){
+	m_Matrix.insert(m_Matrix.end(), in.begin(), in.end());
+	m_Rows++;
 }
 
 void Matrix::SaveMatrix(std::ofstream & outfile) const {

@@ -1,4 +1,5 @@
 #include "activation.h"
+#define print(x) std::cout << x << std::endl
 
 // namespace nn{
 	namespace activation {
@@ -40,12 +41,22 @@
 
 		Matrix Softmax::Function(Matrix& x)
 		{
+			double max = 0.0;
 			double sum = 0.0;
-			Matrix::Map(x, [&sum](double a)
-			{
-				sum += exp(a); return a;
-			});
-			m_Activation = x.Map([sum](double a) { return exp(a) / sum; });
+			std::vector<double> data = x.GetColumnVector();
+			for (int i = 0; i < data.size(); i++) if (max < data[i]) max = data[i];
+			for (int i = 0; i < data.size(); i++) {
+				data[i] = exp(data[i] - max);
+				sum += data[i];
+			}
+			for (int i = 0; i < data.size(); i++) data[i] /= sum;
+			m_Activation = Matrix(data, x.m_Rows, x.m_Columns);
+			// double sum = 0;
+			// Matrix::Map(x, [&sum](double a)
+			// {
+			// 	sum += exp(a); return a;
+			// });
+			// m_Activation = x.Map([sum](double a) { return exp(a) / sum; });
 			return m_Activation;
 		}
 

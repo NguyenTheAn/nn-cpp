@@ -1,9 +1,10 @@
 #include "layer.h"
 #define pii std::pair<unsigned int, unsigned int>
+#define print(x) std::cout << x << std::endl
 
 namespace Layer{
 
-    Matrix& HiddenLayer::operator()(Matrix & input){
+    Matrix HiddenLayer::Forward(Matrix & input){
         WeightedSum = WeightMatrix*input + BiasMatrix;
         Activation = WeightedSum;
         Activation = ActivationFunction->Function(Activation);
@@ -28,6 +29,8 @@ namespace Layer{
 	{}
 
     void HiddenLayer::Initialize(){
+        // WeightMatrix = Matrix(WeightMatrix.m_Rows, WeightMatrix.m_Columns, 1);
+        // BiasMatrix = Matrix(BiasMatrix.m_Rows, BiasMatrix.m_Columns, 1);
         std::random_device randomDevice;
         std::mt19937 engine(randomDevice());
         std::uniform_real_distribution<double> valueDistribution(0.0, 1.0);
@@ -78,12 +81,12 @@ namespace Layer{
     InputLayer::InputLayer(const unsigned int input_dims):input_dims(input_dims){
         m_Input = Matrix(input_dims, 1);
     }
-    Matrix& InputLayer::operator()(Matrix & input){
+    Matrix InputLayer::Forward(Matrix & input){
         this->m_Input = std::move(input);
         return this->m_Input;
     }
 
-    Matrix& OutputLayer::operator()(Matrix & input){
+    Matrix OutputLayer::Forward(Matrix & input){
         WeightedSum = WeightMatrix*input + BiasMatrix;
         Activation = WeightedSum;
         Activation = ActivationFunction->Function(Activation);
@@ -109,6 +112,8 @@ namespace Layer{
 	{}
 
     void OutputLayer::Initialize(){
+        // WeightMatrix = Matrix(WeightMatrix.m_Rows, WeightMatrix.m_Columns, 1);
+        // BiasMatrix = Matrix(BiasMatrix.m_Rows, BiasMatrix.m_Columns, 1);
         std::random_device randomDevice;
         std::mt19937 engine(randomDevice());
         std::uniform_real_distribution<double> valueDistribution(0.0, 1.0);

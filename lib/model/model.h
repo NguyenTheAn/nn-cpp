@@ -16,5 +16,5 @@ class Model{
         void SaveMode(std::string fileName);
         void LoadModel(std::string fileName);
         Matrix Feedforward(Matrix input);
-        float Backpropagation(Matrix input, Matrix target, loss::CrossEntropy criterion, float LR);
+        float Backpropagation(Matrix input, Matrix target, loss::CategoricalCrossEntropy criterion, float LR);
 };

@@ -24,11 +24,9 @@ Matrix load_data(std::string data_path, int rows, int cols){
             int pixel;
             inFile >> pixel;
             data.push_back(pixel);
-            // print(pixel);
         }
     }
     Matrix mat = Matrix(data);
-    // print(mat);
     mat.m_Rows = rows;
     mat.m_Columns = cols;
     inFile.close();
@@ -43,5 +41,5 @@ int main(){
     Matrix mat_test_data = load_data("../data/test_data.txt", 446, 1024);
     Matrix mat_test_label = load_data("../data/test_label.txt", 446, 10);
 
-    print(mat_valid_label);
+    print(mat_test_label);
 }

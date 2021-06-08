@@ -21,7 +21,7 @@ namespace Layer{
             HiddenLayer(const HiddenLayer& layer);
             HiddenLayer& operator=(HiddenLayer&& layer);
             HiddenLayer& operator=(const HiddenLayer& matrix);
-            Matrix& operator()(Matrix & input);
+            Matrix Forward(Matrix & input);
     };
 
     class InputLayer{
@@ -31,7 +31,7 @@ namespace Layer{
             
             InputLayer();
             InputLayer(const unsigned int input_dims);
-            Matrix& operator()(Matrix & input);
+            Matrix Forward(Matrix & input);
 
     };
 
@@ -52,7 +52,7 @@ namespace Layer{
             OutputLayer(const OutputLayer& layer);
             OutputLayer& operator=(OutputLayer&& layer);
             OutputLayer& operator=(const OutputLayer& matrix);
-            Matrix& operator()(Matrix & input);
+            Matrix Forward(Matrix & input);
     };
 
 }
