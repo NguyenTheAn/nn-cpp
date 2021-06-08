@@ -17,7 +17,7 @@ Matrix load_data(const char* data_path, int rows, int cols){
     std::vector<double> data(0);
     for (int i = 0; i < rows; i++){
         for(int j = 0; j < cols; j++){
-            int pixel;
+            float pixel;
             std::cin >> pixel;
             data.push_back(pixel);
             // print(pixel);
@@ -32,14 +32,34 @@ Matrix load_data(const char* data_path, int rows, int cols){
 
 int main(){
 
-    Matrix mat_valid_data = load_data("/home/long/nn-cpp/data/valid_data.txt", 500, 1024);
-    Matrix mat_valid_label = load_data("/home/long/nn-cpp/data/valid_label.txt", 500, 10);
 
-    Matrix mat_train_data = load_data("/home/long/nn-cpp/data/train_data.txt", 1934, 1024);
-    Matrix mat_train_label = load_data("/home/long/nn-cpp/data/train_label.txt", 1934, 10);
+    // optical recognition
+    Matrix mat_valid_data = load_data("../data/valid_data.txt", 500, 1024);
+    Matrix mat_valid_label = load_data("../data/valid_label.txt", 500, 10);
 
-    Matrix mat_test_data = load_data("/home/long/nn-cpp/data/test_data.txt", 446, 1024);
-    Matrix mat_test_label = load_data("/home/long/nn-cpp/data/test_label.txt", 446, 10);
+    Matrix mat_train_data = load_data("../data/train_data.txt", 1934, 1024);
+    Matrix mat_train_label = load_data("../data/train_label.txt", 1934, 10);
 
-    print(mat_valid_label);
+    Matrix mat_test_data = load_data("../data/test_data.txt", 446, 1024);
+    Matrix mat_test_label = load_data("../data/test_label.txt", 446, 10);
+
+    // spam classification
+    Matrix mat_valid_data = load_data("../data/spam_valid_data.txt", 920, 57);
+    Matrix mat_valid_label = load_data("../data/spam_valid_label.txt", 920, 2);
+
+    Matrix mat_train_data = load_data("../data/spam_train_data.txt", 2760, 57);
+    Matrix mat_train_label = load_data("../data/spam_train_label.txt", 2760, 2);
+
+    Matrix mat_test_data = load_data("../data/spam_test_data.txt", 921, 57);
+    Matrix mat_test_label = load_data("../data/spam_test_label.txt", 921, 2);
+
+    // letter recognition
+    Matrix mat_valid_data = load_data("../data/letter_valid_data.txt", 4000, 16);
+    Matrix mat_valid_label = load_data("../data/letter_valid_label.txt", 4000, 26);
+
+    Matrix mat_train_data = load_data("../data/letter_train_data.txt", 12000, 16);
+    Matrix mat_train_label = load_data("../data/letter_train_label.txt", 12000, 26);
+
+    Matrix mat_test_data = load_data("../data/letter_test_data.txt", 4000, 16);
+    Matrix mat_test_label = load_data("../data/letter_test_label.txt", 4000, 26);
 }
