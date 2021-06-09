@@ -11,19 +11,15 @@
 #define pii std::pair<unsigned int, unsigned int>
 #define vb std::vector<double>
 
-
-int EPOCHS = 50;
-float LR = 0.001;
-int BATCH_SIZE = 64;
-
 Model createModel(unsigned int input_dims, unsigned int num_classes){
     Model model;
+    // optical digit
     model.Add(Layer::InputLayer(input_dims));
-    model.Add(Layer::HiddenLayer(1024, 512, activation::Type::RELU));
-    // model.Add(Layer::HiddenLayer(512, 256, activation::Type::RELU));
+    model.Add(Layer::HiddenLayer(input_dims, 512, activation::Type::RELU));
     model.Add(Layer::HiddenLayer(512, 128, activation::Type::RELU));
     model.Add(Layer::HiddenLayer(128, 32, activation::Type::RELU));
     model.Add(Layer::OutputLayer(32, num_classes, activation::Type::SOFTMAX));
+    
     model.Initialize();
     return model;
 }
@@ -49,27 +45,32 @@ Matrix load_data(std::string data_path, int rows, int cols){
     return mat;
 }
 
-std::string dataset = "optical_digits_dataset";
+std::string dataset = "spam_dataset";
+int num_train = 2760;
+int num_val = 920;
+int num_feature = 57;
+int num_classes = 2;
+int EPOCHS = 50;
+float LR = 0.005;
+int BATCH_SIZE = 128;
 
 int main(){
-    Model model = createModel(1024, 10);
+    Model model = createModel(num_feature, num_classes);
     // model.LoadModel("./" + dataset + "/model_50.bin");
     loss::CategoricalCrossEntropy criterion;
-    Matrix mat_train_data = load_data("../data/" + dataset + "/train_data.txt", 1934, 1024);
-    Matrix mat_train_label = load_data("../data/" + dataset + "/train_label.txt", 1934, 10);
-    Matrix mat_valid_data = load_data("../data/" + dataset + "/valid_data.txt", 500, 1024);
-    Matrix mat_valid_label = load_data("../data/" + dataset + "/valid_label.txt", 500, 10);
-    Matrix mat_test_data = load_data("../data/" + dataset + "/test_data.txt", 446, 1024);
-    Matrix mat_test_label = load_data("../data/" + dataset + "/test_label.txt", 446, 10);
+    Matrix mat_train_data = load_data("../data/" + dataset + "/train_data.txt", num_train, num_feature);
+    Matrix mat_train_label = load_data("../data/" + dataset + "/train_label.txt", num_train, num_classes);
+    Matrix mat_valid_data = load_data("../data/" + dataset + "/valid_data.txt", num_val, num_feature);
+    Matrix mat_valid_label = load_data("../data/" + dataset + "/valid_label.txt", num_val, num_classes);
 
     std::vector<int> index;
-    for (int i=0; i<1934; i++){
+    for (int i=0; i<num_train; i++){
         index.push_back(i);
     }
     std::ofstream outFile;
     outFile.open("./" + dataset + "/loss.txt", std::ios_base::out);
     std::ofstream logFile;
-    logFile.open("./" + dataset +"log.txt", std::ios_base::out);
+    logFile.open("./" + dataset +"/log.txt", std::ios_base::out);
     for (int e=1; e<=EPOCHS; e++){
         std::random_shuffle ( index.begin(), index.end() );
 
@@ -90,8 +91,8 @@ int main(){
         for (int idx = 0; idx<index.size(); idx++){
             int i = index[idx];
             if (idx == 0){
-                input = Matrix(mat_train_data.GetRow(i), 1, 1024);
-                label = Matrix(mat_train_label.GetRow(i), 1, 10);
+                input = Matrix(mat_train_data.GetRow(i), 1, num_feature);
+                label = Matrix(mat_train_label.GetRow(i), 1, num_classes);
             }
             else if (idx % BATCH_SIZE == 0 || idx == index.size() - 1){
                 c++;
@@ -102,7 +103,7 @@ int main(){
                 std::cout.flush();
                 input = Matrix::Transpose(Matrix(mat_train_data.GetRow(i)));
                 label = Matrix::Transpose(Matrix(mat_train_label.GetRow(i)));
-                // break;
+                break;
             }
             else{
                 input.AddRow(mat_train_data.GetRow(i));
@@ -111,7 +112,7 @@ int main(){
         }
         std::cout << "]\n";
         float valid_loss = model.Valid(mat_valid_data, mat_valid_label, criterion);
-        logFile << total <<" "<<valid_loss<<std::endl;
+        logFile << total/c <<" "<<valid_loss<<std::endl;
         model.SaveMode("./" + dataset +"/model_" + std::to_string(e) + ".bin");
     }
     outFile.close();

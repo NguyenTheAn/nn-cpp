@@ -127,20 +127,20 @@ float Model::Backpropagation(Matrix inputs, Matrix targets, loss::CategoricalCro
     }
 
     // Update weight
-    deltaOutputWeightBias.first/=inputs.m_Rows;
-    deltaOutputWeightBias.second/=inputs.m_Rows;
+    // double m_L2 = 0.01;
+    // deltaOutputWeightBias.first += 2 * m_L2 * outputLayer.WeightMatrix;
+    
     outputLayer.WeightMatrix -= LR * deltaOutputWeightBias.first;
     outputLayer.BiasMatrix -= LR * deltaOutputWeightBias.second;
-    // print(deltaOutputWeightBias.first);
     for (int i = hiddenLayer.size() - 1; i>0; i--){
-        deltaHiddenWeightBias[i].first /= inputs.m_Rows;
-        deltaHiddenWeightBias[i].second /= inputs.m_Rows;
+        // deltaHiddenWeightBias[i].first += 2 * m_L2 * hiddenLayer[i].WeightMatrix;
+        
         hiddenLayer[i].WeightMatrix -= LR * deltaHiddenWeightBias[i].first;
         hiddenLayer[i].BiasMatrix -= LR * deltaHiddenWeightBias[i].second;
     }
 
-    deltaFirstWeightBias.first/=inputs.m_Rows;
-    deltaFirstWeightBias.second/=inputs.m_Rows;
+    // deltaFirstWeightBias.first += 2 * m_L2 * hiddenLayer[0].WeightMatrix;
+
     hiddenLayer[0].WeightMatrix -= LR * deltaFirstWeightBias.first;
     hiddenLayer[0].BiasMatrix -= LR * deltaFirstWeightBias.second;
 
@@ -167,6 +167,7 @@ float Model::Eval(Matrix val_dataset, Matrix val_label){
 float Model::Valid(Matrix val_dataset, Matrix val_label, loss::CategoricalCrossEntropy criterion){
     float loss = 0;
     for (int i=0; i<val_dataset.m_Rows; i++){
+        print(i);
         Matrix input = Matrix(val_dataset.GetRow(i));
         Matrix label = Matrix(val_label.GetRow(i));
 

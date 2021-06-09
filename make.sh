@@ -1,5 +1,5 @@
 # rm -rf build
-if [ -d "/path/to/dir" ] 
+if [ ! -d "/path/to/dir" ] 
 then
     mkdir build
 fi
