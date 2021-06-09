@@ -49,25 +49,27 @@ Matrix load_data(std::string data_path, int rows, int cols){
     return mat;
 }
 
+std::string dataset = "optical_digits_dataset";
+
 int main(){
     Model model = createModel(1024, 10);
-    model.LoadModel("./checkpoints/model_50.bin");
+    // model.LoadModel("./" + dataset + "/model_50.bin");
     loss::CategoricalCrossEntropy criterion;
-    Matrix mat_train_data = load_data("../data/train_data.txt", 1934, 1024);
-    Matrix mat_train_label = load_data("../data/train_label.txt", 1934, 10);
-    Matrix mat_valid_data = load_data("../data/valid_data.txt", 500, 1024);
-    Matrix mat_valid_label = load_data("../data/valid_label.txt", 500, 10);
-    Matrix mat_test_data = load_data("../data/test_data.txt", 446, 1024);
-    Matrix mat_test_label = load_data("../data/test_label.txt", 446, 10);
+    Matrix mat_train_data = load_data("../data/" + dataset + "/train_data.txt", 1934, 1024);
+    Matrix mat_train_label = load_data("../data/" + dataset + "/train_label.txt", 1934, 10);
+    Matrix mat_valid_data = load_data("../data/" + dataset + "/valid_data.txt", 500, 1024);
+    Matrix mat_valid_label = load_data("../data/" + dataset + "/valid_label.txt", 500, 10);
+    Matrix mat_test_data = load_data("../data/" + dataset + "/test_data.txt", 446, 1024);
+    Matrix mat_test_label = load_data("../data/" + dataset + "/test_label.txt", 446, 10);
 
     std::vector<int> index;
     for (int i=0; i<1934; i++){
         index.push_back(i);
     }
     std::ofstream outFile;
-    outFile.open("loss.txt", std::ios_base::out);
+    outFile.open("./" + dataset + "/loss.txt", std::ios_base::out);
     std::ofstream logFile;
-    logFile.open("log.txt", std::ios_base::out);
+    logFile.open("./" + dataset +"log.txt", std::ios_base::out);
     for (int e=1; e<=EPOCHS; e++){
         std::random_shuffle ( index.begin(), index.end() );
 
@@ -110,7 +112,7 @@ int main(){
         std::cout << "]\n";
         float valid_loss = model.Valid(mat_valid_data, mat_valid_label, criterion);
         logFile << total <<" "<<valid_loss<<std::endl;
-        model.SaveMode("./checkpoints/model_" + std::to_string(e) + ".bin");
+        model.SaveMode("./" + dataset +"/model_" + std::to_string(e) + ".bin");
     }
     outFile.close();
     logFile.close();
