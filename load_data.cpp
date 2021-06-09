@@ -62,4 +62,14 @@ int main(){
 
     Matrix mat_test_data = load_data("../data/letter_test_data.txt", 4000, 16);
     Matrix mat_test_label = load_data("../data/letter_test_label.txt", 4000, 26);
+
+    // mushroom 
+    Matrix mat_valid_data = load_data("../data/mushroom_valid_data.txt", 1625, 117);
+    Matrix mat_valid_label = load_data("../data/mushroom_valid_label.txt", 1625, 2);
+
+    Matrix mat_train_data = load_data("../data/mushroom_train_data.txt", 4874, 117);
+    Matrix mat_train_label = load_data("../data/mushroom_train_label.txt", 4874, 2);
+
+    Matrix mat_test_data = load_data("../data/mushroom_test_data.txt", 1625, 117);
+    Matrix mat_test_label = load_data("../data/mushroom_test_label.txt", 1625, 2);
 }
