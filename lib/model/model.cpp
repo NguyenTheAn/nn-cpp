@@ -5,6 +5,18 @@
 #define shape(x) std::cout << x.m_Rows <<" "<< x.m_Columns << std::endl
 #define print(x) std::cout << x << std::endl
 
+int argmax(std::vector<double> x){
+    double max = -1;
+    int index = 0;
+    for (int i=0; i<x.size(); i++){
+        if (x[i] > max){
+            max = x[i];
+            index = i;
+        }
+    }
+    return index;
+}
+
 Model::Model(){}
 
 void Model::Add(Layer::InputLayer inputLayer){
@@ -133,4 +145,21 @@ float Model::Backpropagation(Matrix inputs, Matrix targets, loss::CategoricalCro
     hiddenLayer[0].BiasMatrix -= LR * deltaFirstWeightBias.second;
 
     return loss/inputs.m_Rows;
+}
+
+float Model::Eval(Matrix val_dataset, Matrix val_label){
+    int correct = 0;
+    int wrong = 0;
+    for (int i=0; i<val_dataset.m_Rows; i++){
+        print(i);
+        Matrix input = Matrix(val_dataset.GetRow(i));
+        Matrix label = Matrix(val_label.GetRow(i));
+
+        Matrix output = Feedforward(input);
+        int pred = argmax(output.m_Matrix);
+        int gt = argmax(label.m_Matrix);
+        if (pred == gt) correct++;
+        else wrong++;
+    }
+    return correct*1.0/(correct + wrong);
 }

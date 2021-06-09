@@ -12,9 +12,10 @@
 #define vb std::vector<double>
 
 
-int EPOCHS = 10;
-float LR = 0.001;
+int EPOCHS = 50;
+float LR = 0.0001;
 int BATCH_SIZE = 32;
+// double eps = 1e-3;
 
 Model createModel(unsigned int input_dims, unsigned int num_classes){
     Model model;
@@ -50,58 +51,65 @@ Matrix load_data(std::string data_path, int rows, int cols){
 
 int main(){
     Model model = createModel(1024, 10);
-    // model.LoadModel("model.bin");
+    model.LoadModel("./checkpoints/model_50.bin");
     loss::CategoricalCrossEntropy criterion;
     Matrix mat_train_data = load_data("../data/train_data.txt", 1934, 1024);
     Matrix mat_train_label = load_data("../data/train_label.txt", 1934, 10);
+    Matrix mat_valid_data = load_data("../data/valid_data.txt", 500, 1024);
+    Matrix mat_valid_label = load_data("../data/valid_label.txt", 500, 10);
+    Matrix mat_test_data = load_data("../data/test_data.txt", 446, 1024);
+    Matrix mat_test_label = load_data("../data/test_label.txt", 446, 10);
 
-    // int i = 0;
+    float acc = model.Eval(mat_valid_data, mat_valid_label);
+    print(acc);
+
+    // int i = 10;
     // Matrix input(mat_train_data.GetRow(i));
     // Matrix label(mat_train_label.GetRow(i));
-    // model.Backpropagation(Matrix::Transpose(input), Matrix::Transpose(label), criterion, LR);
-    // print(model.outputLayer.WeightMatrix);
     // Matrix output = model.Feedforward(input);
+    // print(Matrix::Transpose(output));
+    // print(Matrix::Transpose(label));
     // print(criterion.GetLoss(output, label));
 
-    std::ofstream outFile;
-    outFile.open("loss.txt", std::ios_base::out);
-    for (int e=0; e<EPOCHS; e++){
-        int barLength = 60;
-        int pos = (1934/BATCH_SIZE)/barLength;
-        std::cout<<"EPOCH: "<<e+1<<" <<<<<<<<<"<<std::endl;
-        std::cout << "[";
-        Matrix input;
-        Matrix label;
-        for (int i=0; i<1934; i++){
-            if (i == 0){
-                input = Matrix(mat_train_data.GetRow(i), 1, 1024);
-                label = Matrix(mat_train_label.GetRow(i), 1, 10);
-            }
-            else if (i % BATCH_SIZE == 0){
-                float loss = model.Backpropagation(input, label, criterion, LR);
-                outFile << loss <<std::endl;
-                if (i % pos == 0){
-                    std::cout << "#";
-                    std::cout.flush();
-                } 
-                input = Matrix::Transpose(Matrix(mat_train_data.GetRow(i)));
-                label = Matrix::Transpose(Matrix(mat_train_label.GetRow(i)));
-                // break;
-            }
-            else{
-                input.AddRow(mat_train_data.GetRow(i));
-                label.AddRow(mat_train_label.GetRow(i));
-            }
-        }
-        std::cout << "]\n";
-    }
-    outFile.close();
-    model.SaveMode("model.bin");
+    // std::ofstream outFile;
+    // outFile.open("loss.txt", std::ios_base::out);
+    // for (int e=0; e<EPOCHS; e++){
+    //     std::vector<int> index;
+    //     for (int i=0; i<1934; i++){
+    //         index.push_back(i);
+    //     }
+    //     std::random_shuffle ( index.begin(), index.end() );
 
-    // Matrix output = model.Feedforward(input);
-    // Matrix target(10, 1, 1);
-    // float loss = model.Backpropagation(input, target, criterion, LR);
-    // print(loss);
+    //     if (e % 15 == 0){
+    //         LR /= 10;
+    //     }
+    //     std::cout<<"EPOCH: "<<e+1<<" <<<<<<<<<"<<std::endl;
+    //     std::cout << "[";
+    //     Matrix input;
+    //     Matrix label;
+    //     for (int i=0; i<1934; i++){
+    //         if (i == 0){
+    //             input = Matrix(mat_train_data.GetRow(i), 1, 1024);
+    //             label = Matrix(mat_train_label.GetRow(i), 1, 10);
+    //         }
+    //         else if (i % BATCH_SIZE == 0){
+    //             float loss = model.Backpropagation(input, label, criterion, LR);
+    //             outFile << loss <<std::endl;
+    //             std::cout << "#";
+    //             std::cout.flush();
+    //             input = Matrix::Transpose(Matrix(mat_train_data.GetRow(i)));
+    //             label = Matrix::Transpose(Matrix(mat_train_label.GetRow(i)));
+    //             // break;
+    //         }
+    //         else{
+    //             input.AddRow(mat_train_data.GetRow(i));
+    //             label.AddRow(mat_train_label.GetRow(i));
+    //         }
+    //     }
+    //     std::cout << "]\n";
+    //     model.SaveMode("./checkpoints/model_" + std::to_string(e+1) + ".bin");
+    // }
+    // outFile.close();
 
     return 0;
 }
