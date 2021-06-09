@@ -13,14 +13,14 @@
 
 
 int EPOCHS = 50;
-float LR = 0.0001;
-int BATCH_SIZE = 32;
-// double eps = 1e-3;
+float LR = 0.001;
+int BATCH_SIZE = 64;
 
 Model createModel(unsigned int input_dims, unsigned int num_classes){
     Model model;
     model.Add(Layer::InputLayer(input_dims));
     model.Add(Layer::HiddenLayer(1024, 512, activation::Type::RELU));
+    // model.Add(Layer::HiddenLayer(512, 256, activation::Type::RELU));
     model.Add(Layer::HiddenLayer(512, 128, activation::Type::RELU));
     model.Add(Layer::HiddenLayer(128, 32, activation::Type::RELU));
     model.Add(Layer::OutputLayer(32, num_classes, activation::Type::SOFTMAX));
@@ -60,56 +60,60 @@ int main(){
     Matrix mat_test_data = load_data("../data/test_data.txt", 446, 1024);
     Matrix mat_test_label = load_data("../data/test_label.txt", 446, 10);
 
-    float acc = model.Eval(mat_valid_data, mat_valid_label);
-    print(acc);
+    std::vector<int> index;
+    for (int i=0; i<1934; i++){
+        index.push_back(i);
+    }
+    std::ofstream outFile;
+    outFile.open("loss.txt", std::ios_base::out);
+    std::ofstream logFile;
+    logFile.open("log.txt", std::ios_base::out);
+    for (int e=1; e<=EPOCHS; e++){
+        std::random_shuffle ( index.begin(), index.end() );
 
-    // int i = 10;
-    // Matrix input(mat_train_data.GetRow(i));
-    // Matrix label(mat_train_label.GetRow(i));
-    // Matrix output = model.Feedforward(input);
-    // print(Matrix::Transpose(output));
-    // print(Matrix::Transpose(label));
-    // print(criterion.GetLoss(output, label));
+        if (e % 15 == 0){
+            LR /= 10;
+        }
 
-    // std::ofstream outFile;
-    // outFile.open("loss.txt", std::ios_base::out);
-    // for (int e=0; e<EPOCHS; e++){
-    //     std::vector<int> index;
-    //     for (int i=0; i<1934; i++){
-    //         index.push_back(i);
-    //     }
-    //     std::random_shuffle ( index.begin(), index.end() );
+        std::cout<<"EPOCH: "<<e<<" <<<<<<<<<"<<std::endl;
+        std::cout << "[";
+        outFile << "EPOCH: "<<e<<" <<<<<<<<<" <<std::endl;
+        logFile << "EPOCH: "<<e<<" <<<<<<<<<" <<std::endl;
 
-    //     if (e % 15 == 0){
-    //         LR /= 10;
-    //     }
-    //     std::cout<<"EPOCH: "<<e+1<<" <<<<<<<<<"<<std::endl;
-    //     std::cout << "[";
-    //     Matrix input;
-    //     Matrix label;
-    //     for (int i=0; i<1934; i++){
-    //         if (i == 0){
-    //             input = Matrix(mat_train_data.GetRow(i), 1, 1024);
-    //             label = Matrix(mat_train_label.GetRow(i), 1, 10);
-    //         }
-    //         else if (i % BATCH_SIZE == 0){
-    //             float loss = model.Backpropagation(input, label, criterion, LR);
-    //             outFile << loss <<std::endl;
-    //             std::cout << "#";
-    //             std::cout.flush();
-    //             input = Matrix::Transpose(Matrix(mat_train_data.GetRow(i)));
-    //             label = Matrix::Transpose(Matrix(mat_train_label.GetRow(i)));
-    //             // break;
-    //         }
-    //         else{
-    //             input.AddRow(mat_train_data.GetRow(i));
-    //             label.AddRow(mat_train_label.GetRow(i));
-    //         }
-    //     }
-    //     std::cout << "]\n";
-    //     model.SaveMode("./checkpoints/model_" + std::to_string(e+1) + ".bin");
-    // }
-    // outFile.close();
+        Matrix input;
+        Matrix label;
+
+        float total = 0;
+        int c = 0;
+        for (int idx = 0; idx<index.size(); idx++){
+            int i = index[idx];
+            if (idx == 0){
+                input = Matrix(mat_train_data.GetRow(i), 1, 1024);
+                label = Matrix(mat_train_label.GetRow(i), 1, 10);
+            }
+            else if (idx % BATCH_SIZE == 0 || idx == index.size() - 1){
+                c++;
+                float loss = model.Backpropagation(input, label, criterion, LR);
+                total += loss;
+                outFile << loss <<std::endl;
+                std::cout << "#";
+                std::cout.flush();
+                input = Matrix::Transpose(Matrix(mat_train_data.GetRow(i)));
+                label = Matrix::Transpose(Matrix(mat_train_label.GetRow(i)));
+                // break;
+            }
+            else{
+                input.AddRow(mat_train_data.GetRow(i));
+                label.AddRow(mat_train_label.GetRow(i));
+            }
+        }
+        std::cout << "]\n";
+        float valid_loss = model.Valid(mat_valid_data, mat_valid_label, criterion);
+        logFile << total <<" "<<valid_loss<<std::endl;
+        model.SaveMode("./checkpoints/model_" + std::to_string(e) + ".bin");
+    }
+    outFile.close();
+    logFile.close();
 
     return 0;
 }

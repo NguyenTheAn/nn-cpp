@@ -18,4 +18,5 @@ class Model{
         Matrix Feedforward(Matrix input);
         float Backpropagation(Matrix input, Matrix target, loss::CategoricalCrossEntropy criterion, float LR);
         float Eval(Matrix val_dataset, Matrix val_label);
+        float Valid(Matrix val_dataset, Matrix val_label, loss::CategoricalCrossEntropy criterion);
 };

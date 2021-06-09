@@ -163,3 +163,15 @@ float Model::Eval(Matrix val_dataset, Matrix val_label){
     }
     return correct*1.0/(correct + wrong);
 }
+
+float Model::Valid(Matrix val_dataset, Matrix val_label, loss::CategoricalCrossEntropy criterion){
+    float loss = 0;
+    for (int i=0; i<val_dataset.m_Rows; i++){
+        Matrix input = Matrix(val_dataset.GetRow(i));
+        Matrix label = Matrix(val_label.GetRow(i));
+
+        Matrix output = Feedforward(input);
+        loss += criterion.GetLoss(output, label);
+    }
+    return loss/val_dataset.m_Rows;
+}
