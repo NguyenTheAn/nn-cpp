@@ -82,7 +82,7 @@ float Model::Backpropagation(Matrix inputs, Matrix targets, loss::CategoricalCro
         Matrix dL_dZ = criterion.GetDerivative(output, target); // 10x1
         Matrix dZ_dY = outputLayer.ActivationFunction->Derivative(outputLayer.WeightedSum); // 10x1
         Matrix dY_dW = hiddenLayer[hiddenLayer.size()-1].Activation; // 32x1
-        Matrix dL_dB = dL_dZ.DotProduct(dZ_dY); // 10x1
+        Matrix dL_dB = dL_dZ.ElementWise(dZ_dY); // 10x1
         Matrix dL_dW = dL_dB * Matrix::Transpose(dY_dW); // 10x32
         dL_dZ = Matrix::Transpose(outputLayer.WeightMatrix) * dL_dB; // 32x1
         if (j == 0){
@@ -97,7 +97,7 @@ float Model::Backpropagation(Matrix inputs, Matrix targets, loss::CategoricalCro
         for (int i = hiddenLayer.size() - 1; i>0; i--){
             dZ_dY = hiddenLayer[i].ActivationFunction->Derivative(hiddenLayer[i].WeightedSum); // node x 1
             dY_dW = hiddenLayer[i-1].Activation; //prev_node x 1
-            dL_dB = dL_dZ.DotProduct(dZ_dY); // node x 1
+            dL_dB = dL_dZ.ElementWise(dZ_dY); // node x 1
             dL_dW = dL_dB * Matrix::Transpose(dY_dW); // node x prev_node
             dL_dZ = Matrix::Transpose(hiddenLayer[i].WeightMatrix) * dL_dB; // prev_node x 1
 
@@ -112,7 +112,7 @@ float Model::Backpropagation(Matrix inputs, Matrix targets, loss::CategoricalCro
 
         dZ_dY = hiddenLayer[0].ActivationFunction->Derivative(hiddenLayer[0].WeightedSum); // 512x1
         dY_dW = inputLayer.m_Input; // 1024x1
-        dL_dB = dL_dZ.DotProduct(dZ_dY); // 512x1
+        dL_dB = dL_dZ.ElementWise(dZ_dY); // 512x1
         dL_dW = dL_dB * Matrix::Transpose(dY_dW); // 512x1024
         dL_dZ = Matrix::Transpose(hiddenLayer[0].WeightMatrix) * dL_dB; //1024x1
 

@@ -57,7 +57,7 @@ public:
 	Matrix& operator *=(double scalar);
 	Matrix& operator *= (const Matrix& other);
 	Matrix& operator /= (double scalar);
-	Matrix& DotProduct(const Matrix& other);
+	Matrix& ElementWise(const Matrix& other);
 	Matrix& Transpose();
 	template<typename _Func> Matrix& Map(_Func&& func);
 
@@ -74,7 +74,7 @@ public:
 
 	static Matrix LoadMatrix(std::ifstream& infile);
 	static Matrix OneHot(unsigned int one, unsigned int size);
-	static Matrix DotProduct(const Matrix& left, const Matrix& right);
+	static Matrix ElementWise(const Matrix& left, const Matrix& right);
 	static Matrix Transpose(const Matrix& matrix);
 	static Matrix BuildColumnMatrix(unsigned int rows, double value);
 	static Matrix Max(const Matrix& first, const Matrix& second);

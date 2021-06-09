@@ -194,7 +194,7 @@ Matrix & Matrix::operator/=(double scalar) {
 	return *this;
 }
 
-Matrix & Matrix::DotProduct(const Matrix & other) {
+Matrix & Matrix::ElementWise(const Matrix & other) {
 #ifdef _DEBUG
 	if (!HasSameDimension(other))
 		throw MatrixError("Matrices do not have the same dimension!");
@@ -239,7 +239,7 @@ Matrix Matrix::OneHot(unsigned int one, unsigned int size) {
 	return matrix;
 }
 
-Matrix Matrix::DotProduct(const Matrix & left, const Matrix & right) {
+Matrix Matrix::ElementWise(const Matrix & left, const Matrix & right) {
 #ifdef _DEBUG
 	if (!left.HasSameDimension(right))
 		throw MatrixError("Matrices do not have the same dimension!");
