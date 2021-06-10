@@ -30,7 +30,8 @@ namespace loss{
         for (std::vector<double>::iterator pIt = predictionVector.begin(); pIt != predictionVector.end(); ++pIt, ++tIt)
         {
             double value = -*tIt*log(*pIt) - (1 - *tIt)*log(1 - *pIt);
-            if (!std::isnan(value)) sum += value;
+            if (std::isinf(value) || std::isnan(value)) value = std::numeric_limits<int>::max()*1.0;
+            sum += value;
         }
         return sum;
     }

@@ -51,12 +51,6 @@
 			}
 			for (int i = 0; i < data.size(); i++) data[i] /= sum;
 			m_Activation = Matrix(data, x.m_Rows, x.m_Columns);
-			// double sum = 0;
-			// Matrix::Map(x, [&sum](double a)
-			// {
-			// 	sum += exp(a); return a;
-			// });
-			// m_Activation = x.Map([sum](double a) { return exp(a) / sum; });
 			return m_Activation;
 		}
 

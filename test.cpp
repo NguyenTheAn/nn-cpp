@@ -11,7 +11,7 @@
 Model createModel(unsigned int input_dims, unsigned int num_classes){
     Model model;
     model.Add(Layer::InputLayer(input_dims));
-    model.Add(Layer::HiddenLayer(1024, 512, activation::Type::RELU));
+    model.Add(Layer::HiddenLayer(input_dims, 512, activation::Type::RELU));
     model.Add(Layer::HiddenLayer(512, 128, activation::Type::RELU));
     model.Add(Layer::HiddenLayer(128, 32, activation::Type::RELU));
     model.Add(Layer::OutputLayer(32, num_classes, activation::Type::SOFTMAX));
@@ -40,18 +40,18 @@ Matrix load_data(std::string data_path, int rows, int cols){
     return mat;
 }
 
-std::string dataset = "mushroom_dataset";
+std::string dataset = "spam_dataset";
 
-int num_test = 1625;
-int num_feature = 117;
+int num_test = 921;
+int num_feature = 57;
 int num_classes = 2;
 
 int main(){
     Model model = createModel(num_feature, num_classes);
-    model.LoadModel("./" + dataset + "/model_10.bin");
+    model.LoadModel("./" + dataset + "/model_4.bin");
     Matrix mat_test_data = load_data("../data/" + dataset + "/test_data.txt", num_test, num_feature);
     Matrix mat_test_label = load_data("../data/" + dataset + "/test_label.txt", num_test, num_classes);
 
-    float acc = model.Eval(mat_test_data, mat_test_label);
+    float acc = model.Eval(mat_test_data, mat_test_label, dataset);
     print(acc);
 }

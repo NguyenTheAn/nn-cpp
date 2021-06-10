@@ -77,6 +77,14 @@ float Model::Backpropagation(Matrix inputs, Matrix targets, loss::CategoricalCro
     for (int j=0; j<inputs.m_Rows; j++){
         Matrix input(inputs.GetRow(j)); // 1024x1
         Matrix target(targets.GetRow(j)); // 10x1
+        
+        // std::pair<unsigned int, unsigned int> index0 (0, 0);
+        // std::pair<unsigned int, unsigned int> index1 (0, 1);
+        // std::vector<double> data_;
+        // data_.push_back(target[index0]*0.8);
+        // data_.push_back(target[index1]/0.8);
+        // target = Matrix(data_);
+
         Matrix output = Feedforward(input); // 10x1
         loss += criterion.GetLoss(output, target);
         Matrix dL_dZ = criterion.GetDerivative(output, target); // 10x1
@@ -147,9 +155,11 @@ float Model::Backpropagation(Matrix inputs, Matrix targets, loss::CategoricalCro
     return loss/inputs.m_Rows;
 }
 
-float Model::Eval(Matrix val_dataset, Matrix val_label){
+float Model::Eval(Matrix val_dataset, Matrix val_label, std::string dataset){
     int correct = 0;
     int wrong = 0;
+    std::ofstream outFile;
+    outFile.open("./" + dataset + "/results.txt", std::ios_base::out);
     for (int i=0; i<val_dataset.m_Rows; i++){
         print(i);
         Matrix input = Matrix(val_dataset.GetRow(i));
@@ -158,9 +168,11 @@ float Model::Eval(Matrix val_dataset, Matrix val_label){
         Matrix output = Feedforward(input);
         int pred = argmax(output.m_Matrix);
         int gt = argmax(label.m_Matrix);
+        outFile << pred << " " << gt<<std::endl;
         if (pred == gt) correct++;
         else wrong++;
     }
+    outFile.close();
     return correct*1.0/(correct + wrong);
 }
 

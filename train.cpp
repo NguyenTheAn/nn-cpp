@@ -18,7 +18,7 @@ Model createModel(unsigned int input_dims, unsigned int num_classes){
     model.Add(Layer::HiddenLayer(input_dims, 512, activation::Type::RELU));
     model.Add(Layer::HiddenLayer(512, 128, activation::Type::RELU));
     model.Add(Layer::HiddenLayer(128, 32, activation::Type::RELU));
-    model.Add(Layer::OutputLayer(32, num_classes, activation::Type::SOFTMAX));
+    model.Add(Layer::OutputLayer(32, num_classes, activation::Type::SIGMOID));
     
     model.Initialize();
     return model;
@@ -49,7 +49,7 @@ std::string dataset = "spam_dataset";
 int num_train = 2760;
 int num_val = 920;
 int num_feature = 57;
-int num_classes = 2;
+int num_classes = 1;
 int EPOCHS = 50;
 float LR = 0.001;
 int BATCH_SIZE = 128;
