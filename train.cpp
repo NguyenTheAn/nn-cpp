@@ -51,7 +51,7 @@ int num_val = 920;
 int num_feature = 57;
 int num_classes = 2;
 int EPOCHS = 50;
-float LR = 0.005;
+float LR = 0.001;
 int BATCH_SIZE = 128;
 
 int main(){
@@ -103,7 +103,7 @@ int main(){
                 std::cout.flush();
                 input = Matrix::Transpose(Matrix(mat_train_data.GetRow(i)));
                 label = Matrix::Transpose(Matrix(mat_train_label.GetRow(i)));
-                break;
+                // break;
             }
             else{
                 input.AddRow(mat_train_data.GetRow(i));
