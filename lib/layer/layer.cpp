@@ -29,7 +29,6 @@ namespace Layer{
 	{}
 
     void HiddenLayer::Initialize(){
-        // WeightMatrix = Matrix(WeightMatrix.m_Rows, WeightMatrix.m_Columns, 1);
         BiasMatrix = Matrix(BiasMatrix.m_Rows, BiasMatrix.m_Columns, 0);
         std::random_device randomDevice;
         std::mt19937 engine(randomDevice());
@@ -112,7 +111,6 @@ namespace Layer{
 	{}
 
     void OutputLayer::Initialize(){
-        // WeightMatrix = Matrix(WeightMatrix.m_Rows, WeightMatrix.m_Columns, 1);
         BiasMatrix = Matrix(BiasMatrix.m_Rows, BiasMatrix.m_Columns, 0);
         std::random_device randomDevice;
         std::mt19937 engine(randomDevice());

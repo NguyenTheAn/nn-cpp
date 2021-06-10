@@ -1,27 +1,27 @@
 #include "lossfunction.h"
 
 namespace loss{
-    double MeanAbsoluteError::GetLoss(const Matrix& prediction, const Matrix& target) //const
+    double MeanAbsoluteError::GetLoss(const Matrix& prediction, const Matrix& target)
     {
         return Matrix::Map(prediction - target, [](double x) { return abs(x); }).Sum();
     }
 
-    Matrix MeanAbsoluteError::GetDerivative(const Matrix& prediction, const Matrix& target) //const
+    Matrix MeanAbsoluteError::GetDerivative(const Matrix& prediction, const Matrix& target)
     {
         return Matrix::Map(prediction - target, [](double x) { return x >= 0 ? 1 : -1; });
     }
     
-    double MeanSquaredError::GetLoss(const Matrix& prediction, const Matrix& target) //const
+    double MeanSquaredError::GetLoss(const Matrix& prediction, const Matrix& target)
     {
         return Matrix::Map(prediction - target, [](double x) { return x*x; }).Sum() / (target.GetWidth() * target.GetHeight());
     }
 
-    Matrix MeanSquaredError::GetDerivative(const Matrix& prediction, const Matrix& target) //const
+    Matrix MeanSquaredError::GetDerivative(const Matrix& prediction, const Matrix& target)
     {
         return (prediction - target) * (2.0 / (target.GetWidth() * target.GetHeight()));
     }
 
-    double CrossEntropy::GetLoss(const Matrix& prediction, const Matrix& target) //const
+    double CrossEntropy::GetLoss(const Matrix& prediction, const Matrix& target)
     {
         std::vector<double> predictionVector = prediction.GetColumnVector();
         std::vector<double> targetVector = target.GetColumnVector();
@@ -36,7 +36,7 @@ namespace loss{
         return sum;
     }
 
-    Matrix CrossEntropy::GetDerivative(const Matrix& prediction, const Matrix& target) //const
+    Matrix CrossEntropy::GetDerivative(const Matrix& prediction, const Matrix& target)
     {
         return prediction - target;
     }

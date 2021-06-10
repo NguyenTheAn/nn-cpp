@@ -45,18 +45,17 @@ Matrix load_data(std::string data_path, int rows, int cols){
     return mat;
 }
 
-std::string dataset = "spam_dataset";
-int num_train = 2760;
-int num_val = 920;
-int num_feature = 57;
-int num_classes = 1;
+std::string dataset = "optical_digits_dataset";
+int num_train = 1934;
+int num_val = 500;
+int num_feature = 1024;
+int num_classes = 10;
 int EPOCHS = 50;
-float LR = 0.001;
-int BATCH_SIZE = 128;
+float LR = 0.01;
+int BATCH_SIZE = 64;
 
 int main(){
     Model model = createModel(num_feature, num_classes);
-    // model.LoadModel("./" + dataset + "/model_50.bin");
     loss::CategoricalCrossEntropy criterion;
     Matrix mat_train_data = load_data("../data/" + dataset + "/train_data.txt", num_train, num_feature);
     Matrix mat_train_label = load_data("../data/" + dataset + "/train_label.txt", num_train, num_classes);

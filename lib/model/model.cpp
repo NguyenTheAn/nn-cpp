@@ -77,14 +77,6 @@ float Model::Backpropagation(Matrix inputs, Matrix targets, loss::CategoricalCro
     for (int j=0; j<inputs.m_Rows; j++){
         Matrix input(inputs.GetRow(j)); // 1024x1
         Matrix target(targets.GetRow(j)); // 10x1
-        
-        // std::pair<unsigned int, unsigned int> index0 (0, 0);
-        // std::pair<unsigned int, unsigned int> index1 (0, 1);
-        // std::vector<double> data_;
-        // data_.push_back(target[index0]*0.8);
-        // data_.push_back(target[index1]/0.8);
-        // target = Matrix(data_);
-
         Matrix output = Feedforward(input); // 10x1
         loss += criterion.GetLoss(output, target);
         Matrix dL_dZ = criterion.GetDerivative(output, target); // 10x1
@@ -135,19 +127,12 @@ float Model::Backpropagation(Matrix inputs, Matrix targets, loss::CategoricalCro
     }
 
     // Update weight
-    // double m_L2 = 0.01;
-    // deltaOutputWeightBias.first += 2 * m_L2 * outputLayer.WeightMatrix;
-    
     outputLayer.WeightMatrix -= LR * deltaOutputWeightBias.first;
     outputLayer.BiasMatrix -= LR * deltaOutputWeightBias.second;
     for (int i = hiddenLayer.size() - 1; i>0; i--){
-        // deltaHiddenWeightBias[i].first += 2 * m_L2 * hiddenLayer[i].WeightMatrix;
-        
         hiddenLayer[i].WeightMatrix -= LR * deltaHiddenWeightBias[i].first;
         hiddenLayer[i].BiasMatrix -= LR * deltaHiddenWeightBias[i].second;
     }
-
-    // deltaFirstWeightBias.first += 2 * m_L2 * hiddenLayer[0].WeightMatrix;
 
     hiddenLayer[0].WeightMatrix -= LR * deltaFirstWeightBias.first;
     hiddenLayer[0].BiasMatrix -= LR * deltaFirstWeightBias.second;
