@@ -40,15 +40,15 @@ Matrix load_data(std::string data_path, int rows, int cols){
     return mat;
 }
 
-std::string dataset = "spam_dataset";
+std::string dataset = "optical_digits_dataset";
 
-int num_test = 921;
-int num_feature = 57;
-int num_classes = 2;
+int num_test = 446;
+int num_feature = 1024;
+int num_classes = 10;
 
 int main(){
     Model model = createModel(num_feature, num_classes);
-    model.LoadModel("./" + dataset + "/model_4.bin");
+    model.LoadModel("./" + dataset + "/model_50.bin");
     Matrix mat_test_data = load_data("../data/" + dataset + "/test_data.txt", num_test, num_feature);
     Matrix mat_test_label = load_data("../data/" + dataset + "/test_label.txt", num_test, num_classes);
 
