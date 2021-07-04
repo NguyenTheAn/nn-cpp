@@ -11,11 +11,13 @@ namespace activation {
     class ActivationFunction
     {
     public:
-        virtual Matrix Function(Matrix& x) = 0;
-        virtual Matrix Derivative(Matrix& x) = 0;
-        virtual Type GetType() const = 0;
-        virtual void SaveActivationFunction(std::ofstream& out) const;
+        virtual Matrix Function(Matrix& x) = 0; // đưa input qua activation function
+        virtual Matrix Derivative(Matrix& x) = 0; // tính đạo hàm
+        virtual Type GetType() const = 0; // lấy loại activation
+        virtual void SaveActivationFunction(std::ofstream& out) const; // lưu
     };
+
+    // doạn ở dưới viết lại các hàm định nghĩa ở trên
 
     class Sigmoid : public ActivationFunction
     {
@@ -48,5 +50,5 @@ namespace activation {
 
 class ActivationFunctionFactory {
 public:
-    static std::shared_ptr<activation::ActivationFunction> BuildActivationFunction(activation::Type type);
+    static std::shared_ptr<activation::ActivationFunction> BuildActivationFunction(activation::Type type); // trả về loại activation theo loại
 };

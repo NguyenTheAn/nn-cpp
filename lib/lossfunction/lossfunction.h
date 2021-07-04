@@ -6,8 +6,8 @@ namespace loss {
     class CrossEntropy 
     {
     public:
-        double GetLoss(const Matrix& prediction, const Matrix& target); 
-        Matrix GetDerivative(const Matrix& prediction, const Matrix& target); 
+        double GetLoss(const Matrix& prediction, const Matrix& target); // tính giá trị loss
+        Matrix GetDerivative(const Matrix& prediction, const Matrix& target); // tính đạo hàm 
     };
 
     class CategoricalCrossEntropy{

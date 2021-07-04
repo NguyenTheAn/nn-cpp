@@ -9,14 +9,14 @@ class Model{
         Layer::OutputLayer outputLayer;
 
         Model();
-        void Add(Layer::InputLayer inputLayer);
+        void Add(Layer::InputLayer inputLayer); // thêm layer vào model
         void Add(Layer::HiddenLayer hidden);
         void Add(Layer::OutputLayer outputLayer);
-        void Initialize();
-        void SaveMode(std::string fileName);
-        void LoadModel(std::string fileName);
-        Matrix Feedforward(Matrix input);
-        float Backpropagation(Matrix input, Matrix target, loss::CategoricalCrossEntropy criterion, float LR);
-        float Eval(Matrix val_dataset, Matrix val_label, std::string dataset);
-        float Valid(Matrix val_dataset, Matrix val_label, loss::CategoricalCrossEntropy criterion);
+        void Initialize(); // khởi tạo tham số
+        void SaveMode(std::string fileName); // lưu mô hình
+        void LoadModel(std::string fileName); // load mô hình
+        Matrix Feedforward(Matrix input); // forward
+        float Backpropagation(Matrix input, Matrix target, loss::CategoricalCrossEntropy criterion, float LR); // tính backward
+        float Eval(Matrix val_dataset, Matrix val_label, std::string dataset); // evaluation trên tập test
+        float Valid(Matrix val_dataset, Matrix val_label, loss::CategoricalCrossEntropy criterion); // tính loss trên tập valid
 };

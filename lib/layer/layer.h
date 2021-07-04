@@ -6,22 +6,22 @@
 namespace Layer{
     class HiddenLayer{
         public:
-            Matrix WeightMatrix;
-            Matrix BiasMatrix;
-            std::shared_ptr<activation::ActivationFunction> ActivationFunction;
-            Matrix Activation;
-            Matrix WeightedSum;
+            Matrix WeightMatrix; // ma trận trọn số
+            Matrix BiasMatrix; // ma trậN bias
+            std::shared_ptr<activation::ActivationFunction> ActivationFunction; // hàm kích hoạt
+            Matrix Activation; // ma trận sau khi đưa qua hàm kích hoạt
+            Matrix WeightedSum; // ma trận trước khi đưa qua activation Wx + B
 
-            HiddenLayer();
-            HiddenLayer(unsigned int inputNeurons, unsigned int outputNeurons, activation::Type activationFunction);
-            void Initialize();
-            void SaveHiddenLayer(std::ofstream& outfile) const;
-            static HiddenLayer LoadHiddenLayer(std::ifstream& infile);
-            HiddenLayer(HiddenLayer&& layer) noexcept;
-            HiddenLayer(const HiddenLayer& layer);
-            HiddenLayer& operator=(HiddenLayer&& layer);
-            HiddenLayer& operator=(const HiddenLayer& matrix);
-            Matrix Forward(Matrix & input);
+            HiddenLayer(); // hàm khởi tạo
+            HiddenLayer(unsigned int inputNeurons, unsigned int outputNeurons, activation::Type activationFunction); // hàm khởi tạo
+            void Initialize(); // khởI tạo trọng số
+            void SaveHiddenLayer(std::ofstream& outfile) const; // lưu layer
+            static HiddenLayer LoadHiddenLayer(std::ifstream& infile); // load
+            HiddenLayer(HiddenLayer&& layer) noexcept; // hàm khỏi tạo
+            HiddenLayer(const HiddenLayer& layer); // hàm khỏi tạo
+            HiddenLayer& operator=(HiddenLayer&& layer); // ghi đè toán tử gán
+            HiddenLayer& operator=(const HiddenLayer& matrix); // ghi đè toán tử gán
+            Matrix Forward(Matrix & input); // tính forward
     };
 
     class InputLayer{
@@ -29,13 +29,13 @@ namespace Layer{
             unsigned int input_dims;
             Matrix m_Input;
             
-            InputLayer();
-            InputLayer(const unsigned int input_dims);
-            Matrix Forward(Matrix & input);
+            InputLayer(); // hàm khỏi tạo
+            InputLayer(const unsigned int input_dims); //hàm khỏi tạo
+            Matrix Forward(Matrix & input); // tính forward
 
     };
 
-    class OutputLayer{
+    class OutputLayer{ // tương tự hidden layer
         public:
             Matrix WeightMatrix;
             Matrix BiasMatrix;
